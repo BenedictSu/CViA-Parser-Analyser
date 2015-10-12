@@ -5,7 +5,7 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from cStringIO import StringIO
 
-def convert_pdf_to_txt(path):
+def convert_pdf_to_file(path):
     rsrcmgr = PDFResourceManager()
     retstr = StringIO()
     codec = 'utf-8'
@@ -24,6 +24,6 @@ def convert_pdf_to_txt(path):
     str = retstr.getvalue()
     retstr.close()
     return str
-    
-pdfFilePath = raw_input("Please enter the location of the CV in pdf format: ")
-print(convert_pdf_to_txt(pdfFilePath))
+
+# pdfFilePath = raw_input("Please enter the location of the CV in pdf format: ")
+# print(convert_pdf_to_file(pdfFilePath))
