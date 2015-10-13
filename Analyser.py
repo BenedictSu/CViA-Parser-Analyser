@@ -1,5 +1,5 @@
 from sets import Set
-from Parser import Parser, PDFConverter, Tokenizer
+from Parser import Parser
 
 class Analyser:
     pLang = Set(["c++", "objective c", "c#", "java", "swift", "python", "cobol",
@@ -39,3 +39,16 @@ class Analyser:
             return float(matched) / total
         else:
             return 0;
+
+class Calculator:
+    global weightage
+    weightage = [0.4, 0.5]
+
+    def __init__(self, intScore):
+        self.intScore = intScore
+
+    def countScore (self):
+        score = 0
+        for count in range(0, len(weightage)):
+            score += self.intScore[count] * weightage[count]
+        return score
