@@ -1,28 +1,41 @@
-# reference to http://www.nltk.org/book/ch07.html
-import nltk, re, pprint, sets
+from sets import Set
+from Parser import Parser, PDFConverter, Tokenizer
 
-from Parser import convert_pdf_to_file
-from nltk.corpus import treebank_chunk
-
-pdfFilePath = raw_input("Please enter the location of the JD in pdf format: ")
-jd = convert_pdf_to_file(pdfFilePath).decode('utf-8')
-pdfFilePath = raw_input("Please enter the location of the CV in pdf format: ")
-cv = convert_pdf_to_file(pdfFilePath).decode('utf-8')
-
-def processing (cFile):
-    tokens = nltk.wordpunct_tokenize(cFile)
-    tset = sets.Set(tokens)
-    return tset
+class Analyser:
+    pLang = Set(["c++", "objective c", "c#", "java", "swift", "python", "cobol",
+                     "haskell", "javaSctipt", "latex", "matlab", "objective-c", "pascal",
+                     "php", "prolog", "ruby", "scheme", "tex", "unity", "unix shell"])
+    sLang = Set(["english", "mandarin", "chinese", "indonesian", "tamil", "malay",
+                 "japanese", "malay", "russian", "french"])
+    global fields
+    fields = [pLang, sLang]
     
-cv = processing(cv)
-jd = processing(jd)
+    def __init__(self, jdTokens, cvTokens):
+        self.jdTokens = jdTokens
+        self.cvTokens = cvTokens
 
-total = 0
-matched = 0
-for key in cv:
-    if key in jd:
-        matched += 1
-    total += 1
+    def countIntScore (self):
+        score = [0, 0]
 
-print "The percentage matched is: "
-print float(matched) / total
+        jd = Parser(self.jdTokens)
+        cv = Parser(self.cvTokens)
+        
+        count = 0
+        for field in fields:
+            jdMat = jd.match(field)
+            cvMat = cv.match(field)
+            score[count] = self.countMatches(jdMat, cvMat) 
+            count += 1
+        return score
+    
+    def countMatches (self, categories, template):
+        total = 0
+        matched = 0
+        for cat in categories:
+            if cat in template:
+                matched += 1
+            total += 1
+        if total != 0:
+            return float(matched) / total
+        else:
+            return 0;
