@@ -10,15 +10,18 @@ import nltk, re, pprint, sets
 
 from nltk.corpus import treebank_chunk
 
+# for Parser
+from sets import Set
+
 # reference to http://stackoverflow.com/questions/5725278/python-help-using-pdfminer-as-a-library
 class PDFConverter:
     def __init__(self, path):
         rsrcmgr = PDFResourceManager()
         retstr = StringIO()
-        codec = 'utf-8'
+        codec = "utf-8"
         laparams = LAParams()
         device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-        fp = file(path, 'rb')
+        fp = file(path, "rb")
         interpreter = PDFPageInterpreter(rsrcmgr, device)
         password = ""
         maxpages = 0
@@ -29,31 +32,24 @@ class PDFConverter:
             interpreter.process_page(page)
         fp.close()
         device.close()
-        self.str = retstr.getvalue()
+        self.str = retstr.getvalue().decode("utf-8")
         retstr.close()
 
 # reference to http://www.nltk.org/book/ch07.html
-class Tokenizer
+class Tokenizer:
     def __init__ (self, cFile):
         tokens = nltk.wordpunct_tokenize(cFile)
-        self.tokens = sets.Set(tokens)
+        self.tokens = Set()
+        for token in tokens:
+            self.tokens.add(token.lower())
 
-pdfFilePath = raw_input("Please enter the location of the JD in pdf format: ")
-jd = PDFConverter(pdfFilePath)
-jd = jd.str.decode('utf-8')
-pdfFilePath = raw_input("Please enter the location of the CV in pdf format: ")
-cv = PDFConverter(pdfFilePath)
-cv = cv.str.decode('utf-8')
+class Parser:
+    def __init__ (self, text):
+        self.tokens = text
 
-cv = processing(cv)
-jd = processing(jd)
-
-total = 0
-matched = 0
-for key in cv:
-    if key in jd:
-        matched += 1
-    total += 1
-
-print "The percentage matched is: "
-print float(matched) / total
+    def match (self, categories):
+        matches = Set()
+        for cat in categories:
+            if cat in self.tokens:
+                matches.add(cat)
+        return matches
