@@ -35,7 +35,6 @@ class PDFConverter:
         self.str = retstr.getvalue().decode("utf-8")
         retstr.close()
 
-# reference to http://www.nltk.org/book/ch07.html
 class Tokenizer:
     def __init__ (self, cFile):
         tokens = nltk.wordpunct_tokenize(cFile)
