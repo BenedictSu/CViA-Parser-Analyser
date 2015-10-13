@@ -7,15 +7,16 @@ class Analyser:
                      "php", "prolog", "ruby", "scheme", "tex", "unity", "unix shell"])
     sLang = Set(["english", "mandarin", "chinese", "indonesian", "tamil", "malay",
                  "japanese", "malay", "russian", "french"])
+    country = Set(["singapore", "malaysia", "england", "japan", "france", "usa"]) 
     global fields
-    fields = [pLang, sLang]
+    fields = [pLang, sLang, country]
     
     def __init__(self, jdTokens, cvTokens):
         self.jdTokens = jdTokens
         self.cvTokens = cvTokens
 
     def countIntScore (self):
-        score = [0, 0]
+        score = [0, 0, 0]
 
         jd = Parser(self.jdTokens)
         cv = Parser(self.cvTokens)
@@ -42,7 +43,7 @@ class Analyser:
 
 class Calculator:
     global weightage
-    weightage = [0.4, 0.5]
+    weightage = [0.3, 0.3, 0.4]
 
     def __init__(self, intScore):
         self.intScore = intScore
